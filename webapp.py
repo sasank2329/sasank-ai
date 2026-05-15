@@ -7,9 +7,12 @@ load_dotenv()
 
 st.set_page_config(page_title="Sasank AI")
 
-llm = ChatOpenAI(model="gpt-4o-mini")
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    temperature=0
+)
 
-search_tool = TavilySearchResults(max_results=3)
+search_tool = TavilySearchResults(max_results=5)
 
 st.title("Sasank AI")
 
@@ -33,26 +36,45 @@ if prompt:
 
     realtime_keywords = [
         "weather",
-        "news",
         "today",
-        "score",
+        "news",
         "live",
+        "score",
+        "ipl",
+        "match",
         "price",
-        "current"
+        "current",
+        "latest"
     ]
 
-    if any(word in prompt.lower() for word in realtime_keywords):
+    use_search = any(
+        word in prompt.lower()
+        for word in realtime_keywords
+    )
+
+    if use_search:
 
         search_results = search_tool.invoke(prompt)
 
         final_prompt = f"""
-        Use this live internet data to answer:
+You are an AI assistant with access to LIVE internet search results.
 
-        {search_results}
+Use ONLY the information below to answer the user accurately.
 
-        User question:
-        {prompt}
-        """
+Live search results:
+{search_results}
+
+User question:
+{prompt}
+
+Give a direct answer.
+Do NOT say:
+- you don't have internet access
+- you cannot access live data
+- you recommend checking websites
+
+Answer naturally and confidently using the live data above.
+"""
 
         response = llm.invoke(final_prompt)
 
