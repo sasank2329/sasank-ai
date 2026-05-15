@@ -4,7 +4,7 @@ from langchain_openai import ChatOpenAI
 
 load_dotenv()
 
-st.title("My ChatGPT Clone")
+st.title("sasank Ai")
 
 try:
     llm = ChatOpenAI(model="gpt-4o-mini")
