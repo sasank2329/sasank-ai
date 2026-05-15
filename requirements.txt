@@ -5,3 +5,4 @@ python-dotenv
 langsmith
 langchain-community
 openai
+tavily-python
